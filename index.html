@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>探索肇庆 | Zhaoqing</title>
+  <style>
+    :root {
+      --bg-body: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --text-primary: #1d1d1f;
+      --text-secondary: #86868b;
+      --accent: #2997ff;
+      --card-radius: 28px;
+      --ease-apple: cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-primary);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; transition: color 0.3s; }
+    img { display: block; width: 100%; height: auto; }
+    ul { list-style: none; }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 52px;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, border-bottom 0.4s ease;
+      background: rgba(255, 255, 255, 0);
+      backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+    }
+
+    header.scrolled {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    nav ul {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li a {
+      font-size: 12px;
+      color: #fff;
+      font-weight: 500;
+      opacity: 0.9;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      transition: color 0.4s ease;
+    }
+
+    header.scrolled nav ul li a {
+      color: #1d1d1f;
+      text-shadow: none;
+    }
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-color: #000;
+      color: #fff;
+    }
+
+    .hero-bg-wrapper {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 120%;
+      z-index: 1;
+    }
+
+    .hero-bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+      transform: scale(1.05);
+      transition: opacity 1s ease;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroFadeIn 1.2s var(--ease-apple) forwards 0.5s;
+    }
+
+    @keyframes heroFadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      font-size: 24px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 40px;
+    }
+
+    .reveal-element {
+      opacity: 0;
+      transform: translateY(60px) scale(0.98);
+      transition: opacity 1s var(--ease-apple), transform 1s var(--ease-apple);
+    }
+
+    .reveal-element.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+
+    .section {
+      padding: 100px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 60px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-desc {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    .bg-gray { background-color: var(--bg-secondary); }
+
+    .grid-spots {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+      transition: transform 0.4s var(--ease-apple), box-shadow 0.4s var(--ease-apple);
+      height: 520px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      z-index: 10;
+    }
+
+    .card-img-wrapper {
+      height: 65%;
+      overflow: hidden;
+    }
+
+    .card-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s var(--ease-apple);
+    }
+
+    .card:hover .card-img-wrapper img {
+      transform: scale(1.08);
+    }
+
+    .card-content {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-content h3 { font-size: 24px; margin-bottom: 10px; }
+    .card-content p { font-size: 16px; color: var(--text-secondary); }
+
+    .gallery-container {
+      width: 100%;
+      overflow-x: auto;
+      display: flex;
+      gap: 20px;
+      padding-bottom: 40px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-left: max(24px, calc((100% - 1200px) / 2));
+      padding-right: 24px;
+    }
+    .gallery-container::-webkit-scrollbar { display: none; }
+
+    .gallery-item {
+      min-width: 360px;
+      height: 240px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .gallery-item img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      transition: transform 0.6s;
+    }
+    
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    .food-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+      margin-bottom: 100px;
+    }
+
+    .food-img-box {
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+    }
+
+    .food-info h3 { font-size: 40px; margin-bottom: 20px; font-weight: 700; }
+    .food-info p { font-size: 20px; color: var(--text-secondary); line-height: 1.6; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .info-card {
+      background: var(--bg-secondary);
+      padding: 40px;
+      border-radius: 24px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .info-card:hover { background: #eaeaea; }
+    .info-card h4 { font-size: 22px; margin-bottom: 10px; }
+    .info-card p { font-size: 16px; color: var(--text-secondary); }
+
+    footer {
+      background: #111;
+      color: #888;
+      padding: 60px 20px;
+      text-align: center;
+      font-size: 12px;
+    }
+    footer a { color: #fff; margin: 0 10px; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 42px; }
+      .section-title { font-size: 32px; }
+      .food-feature { grid-template-columns: 1fr; gap: 30px; }
+      .info-grid { grid-template-columns: 1fr; }
+      .hero-bg-wrapper { height: 100%; }
+      .card { height: 420px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header id="navbar">
+    <nav>
+      <ul>
+        <li><a href="#">ZHAOQING</a></li>
+        <li><a href="#spots">景点</a></li>
+        <li><a href="#gallery">影像</a></li>
+        <li><a href="#local-food">风味</a></li>
+        <li><a href="#guide">指南</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg-wrapper" id="parallax-bg">
+      <img src="images/zhaoqing1.jpg" alt="肇庆风光" class="hero-bg" id="hero-img">
+    </div>
+    <div class="hero-content" id="hero-text">
+      <h1>肇庆。</h1>
+      <p>岭南山水，千年古韵。</p>
+    </div>
+  </section>
+
+  <section class="bg-gray" id="spots">
+    <div class="section">
+      <div class="section-header reveal-element">
+        <h2 class="section-title">自然奇观</h2>
+        <p class="section-desc">这里有岭南最独特的喀斯特地貌与北回归线上最完整的原始森林。</p>
+      </div>
+      
+      <div class="grid-spots">
+        <div class="card reveal-element delay-100">
+          <div class="card-img-wrapper"><img src="images/spot1.jpg" alt="七星岩"></div>
+          <div class="card-content">
+            <h3>七星岩</h3>
+            <p>人间仙境。七座石灰岩峰峦如北斗七星般散落在湖面，山水相连。</p>
+          </div>
+        </div>
+        
+        <div class="card reveal-element delay-200">
+          <div class="card-img-wrapper"><img src="images/spot2.jpg" alt="鼎湖山"></div>
+          <div class="card-content">
+            <h3>鼎湖山</h3>
+            <p>天然氧吧。中国第一个自然保护区，飞瀑流泉与古刹钟声交织。</p>
+          </div>
+        </div>
+        
+        <div class="card reveal-element delay-300">
+          <div class="card-img-wrapper"><img src="images/spot3.jpg" alt="星湖"></div>
+          <div class="card-content">
+            <h3>星湖夜色</h3>
+            <p>如梦似幻。当夜幕降临，漫步栈道，感受城市与自然的完美融合。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="section-header reveal-element">
+      <h2 class="section-title">光影印象</h2>
+    </div>
+    <div class="gallery-container reveal-element">
+      <div class="gallery-item"><img src="images/gallery1.jpg" alt="Gallery"></div>
+      <div class="gallery-item"><img src="images/gallery2.jpg" alt="Gallery"></div>
+      <div class="gallery-item"><img src="images/gallery3.jpg" alt="Gallery"></div>
+      <div class="gallery-item"><img src="images/spot1.jpg" alt="Gallery"></div>
+      <div class="gallery-item"><img src="images/zhaoqing1.jpg" alt="Gallery"></div>
+    </div>
+  </section>
+
+  <section class="bg-gray" id="local-food">
+    <div class="section">
+      <div class="food-feature reveal-element">
+        <div class="food-img-box">
+          <img src="images/food1.jpg" alt="裹蒸粽">
+        </div>
+        <div class="food-info">
+          <h3>肇庆裹蒸粽</h3>
+          <p>不仅仅是食物，更是文化的重量。选用本地特有的冬叶，包裹上等糯米、绿豆与肥瘦相间的猪肉。猛火煲煮十小时，热食清香，回味无穷。</p>
+        </div>
+      </div>
+
+      <div class="food-feature reveal-element">
+        <div class="food-info" style="order: 2;"> <h3>鼎湖上素</h3>
+          <p>源于庆云寺的百年名菜。集香菇、银耳、竹笋等十余种素菜精华于一盘。色泽雅丽，鲜嫩爽滑，是素食文化的巅峰之作。</p>
+        </div>
+        <div class="food-img-box" style="order: 1;">
+          <img src="images/food2.jpg" alt="鼎湖上素">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="guide">
+    <div class="section-header reveal-element">
+      <h2 class="section-title">出行指南</h2>
+    </div>
+    
+    <div class="grid-spots" style="grid-template-columns: 1fr 1fr;">
+      <div class="reveal-element delay-100">
+        <h3 style="margin-bottom:20px; font-size:24px;">精选住宿</h3>
+        <div class="info-grid" style="grid-template-columns: 1fr;">
+          <div class="info-card">
+            <h4>温德姆至尊酒店</h4>
+            <p>5A景区湖畔，尽享奢华湖景。</p>
+          </div>
+          <div class="info-card">
+            <h4>肇庆星酒店</h4>
+            <p>市中心繁华地段，出行极度便利。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-element delay-200">
+        <h3 style="margin-bottom:20px; font-size:24px;">交通方式</h3>
+        <div class="info-grid" style="grid-template-columns: 1fr;">
+          <div class="info-card">
+            <h4>高铁直达</h4>
+            <p>肇庆东站/肇庆站，大湾区1小时通达。</p>
+          </div>
+          <div class="info-card">
+            <h4>飞机换乘</h4>
+            <p>广州白云机场转乘城际巴士，约90分钟。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Zhaoqing Tourism. Design by 陈承启.</p>
+  </footer>
+
+  <script>
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-element').forEach(el => {
+      observer.observe(el);
+    });
+
+    const navbar = document.getElementById('navbar');
+    const parallaxBg = document.getElementById('parallax-bg');
+    const heroText = document.getElementById('hero-text');
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+
+      if (scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      if (scrollY < window.innerHeight) {
+        parallaxBg.style.transform = `translateY(${scrollY * 0.5}px)`;
+        heroText.style.transform = `translateY(${scrollY * 0.3}px)`;
+        heroText.style.opacity = 1 - scrollY / 500;
+      }
+    });
+
+    const images = [
+      'images/zhaoqing1.jpg',
+      'images/zhaoqing2.jpg',
+      'images/zhaoqing3.jpg'
+    ];
+    let index = 0;
+    const heroImg = document.getElementById('hero-img');
+
+    setInterval(() => {
+      index = (index + 1) % images.length;
+      heroImg.style.opacity = '0';
+      setTimeout(() => {
+        heroImg.src = images[index];
+        heroImg.style.opacity = '0.7';
+      }, 1000);
+    }, 5000);
+  </script>
+</body>
+</html>
